@@ -8,13 +8,13 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
-public class AiBotLauncher extends Launcher {
+public class GameServerLauncher extends Launcher {
 
-    private Logger LOGGER = LoggerFactory.getLogger(AiBotLauncher.class);
+    private Logger LOGGER = LoggerFactory.getLogger(GameServerLauncher.class);
 
     public static void main(String[] args) {
         System.out.println("[ SYSTEM ] Booting ... > " + System.currentTimeMillis());
-        new AiBotLauncher().dispatch(args);
+        new GameServerLauncher().dispatch(args);
     }
 
     public void afterConfigParsed(JsonObject config) {

@@ -1,6 +1,6 @@
-# AI Bot
+# Game Server
 
-Self Learning AI Bot
+Rest based Tic Tac Toe game server
 
 Build / Run files in `run/`
 

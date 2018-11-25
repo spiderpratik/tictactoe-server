@@ -41,7 +41,7 @@
 
     <!-- Build and Run Properties -->
     <output.directory>target</output.directory>
-    <main.class>org.codinator.game.ttt.server.AiBotLauncher</main.class>
+    <main.class>org.codinator.game.ttt.server.GameServerLauncher</main.class>
     <main.verticle>org.codinator.game.ttt.server.DeployingVerticle</main.verticle>
   </properties>
 
