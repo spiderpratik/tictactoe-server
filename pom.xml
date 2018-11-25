@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.codinator</groupId>
+  <artifactId>tictactoe-server</artifactId>
+  <version>1.0</version>
+
+  <!-- ====================================================================== -->
+  <!-- P R O P E R T I E S                                                    -->
+  <!-- ====================================================================== -->
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <!-- Development Dependency Versions -->
+    <java.version>1.8</java.version>
+    <vertx.version>3.5.4</vertx.version>
+    <guice.version>4.2.2</guice.version>
+    <guava.version>27.0-jre</guava.version>
+
+    <!-- Testing Dependency Versions -->
+    <junit.jupiter.version>5.3.1</junit.jupiter.version>
+    <mockito.version>2.23.4</mockito.version>
+
+    <!-- Logging Dependency Versions -->
+    <log4j.version>2.11.1</log4j.version>
+
+    <!-- Maven Plugin Versions -->
+    <maven.assembly.plugin.version>3.1.0</maven.assembly.plugin.version>
+    <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
+    <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
+    <maven.dependency.plugin.version>3.1.1</maven.dependency.plugin.version>
+    <maven.javadoc.plugin.version>3.0.1</maven.javadoc.plugin.version>
+    <maven.resources.plugin.version>3.1.0</maven.resources.plugin.version>
+    <maven.shade.plugin.version>3.2.1</maven.shade.plugin.version>
+    <maven.surefire.plugin.version>2.22.1</maven.surefire.plugin.version>
+
+    <!-- Build and Run Properties -->
+    <output.directory>target</output.directory>
+    <main.class>org.codinator.game.ttt.server.AiBotLauncher</main.class>
+    <main.verticle>org.codinator.game.ttt.server.DeployingVerticle</main.verticle>
+  </properties>
+
+  <!-- ====================================================================== -->
+  <!-- B U I L D                                                              -->
+  <!-- ====================================================================== -->
+  <build>
+    <plugins>
+
+      <!-- Maven Resources Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>${maven.resources.plugin.version}</version>
+      </plugin>
+
+      <!-- Maven Compiler Plugin -->
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven.compiler.plugin.version}</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+          <compilerArgument>-Xlint</compilerArgument>
+        </configuration>
+      </plugin>
+
+      <!-- Unit Tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven.surefire.plugin.version}</version>
+        <configuration>
+          <enableAssertions>true</enableAssertions>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-surefire-provider</artifactId>
+            <version>1.0.3</version>
+          </dependency>
+          <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <!-- Maven Shade Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>${maven.shade.plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer
+                  implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <manifestEntries>
+                    <Main-Class>${main.class}</Main-Class>
+                    <Main-Verticle>${main.verticle}</Main-Verticle>
+                  </manifestEntries>
+                </transformer>
+                <transformer
+                  implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/services/io.vertx.core.spi.VerticleFactory</resource>
+                </transformer>
+              </transformers>
+              <outputFile>
+                ${project.build.directory}/${project.artifactId}-${project.version}-fat.jar
+              </outputFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <!-- ====================================================================== -->
+  <!-- D E P E N D E N C I E S                                                -->
+  <!-- ====================================================================== -->
+  <dependencies>
+
+    <!-- Vertx dependencies -->
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-core</artifactId>
+      <version>${vertx.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web</artifactId>
+      <version>${vertx.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web-client</artifactId>
+      <version>${vertx.version}</version>
+    </dependency>
+
+
+    <!-- Logging Dependencies -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
+
+
+    <!-- Google Dependencies -->
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <version>${guice.version}</version>
+    </dependency>
+
+    <!--<dependency>
+      <groupId>com.google.inject.extensions</groupId>
+      <artifactId>guice-multibindings</artifactId>
+      <version>${guice.version}</version>
+    </dependency>-->
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+    </dependency>
+
+
+    <!-- Test dependencies -->
+    <!--<dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>${junit.jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-codegen</artifactId>
+      <version>${vertx.version}</version>
+      <scope>test</scope>
+    </dependency>-->
+
+  </dependencies>
+</project>

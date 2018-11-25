@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT"/>
+    <File name="FileAppender" fileName="log/main.log" immediateFlush="true" append="true">
+      <PatternLayout
+        pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [ %thread ] [ %level ] %class{1}:%line - %message%n%throwable"/>
+    </File>
+  </Appenders>
+  <Loggers>
+    <Root level="WARN" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Root>
+    <Logger name="org.codinator" level="TRACE" additivity="false">
+      <Appender-ref ref="FileAppender"/>
+    </Logger>
+  </Loggers>
+</Configuration>
